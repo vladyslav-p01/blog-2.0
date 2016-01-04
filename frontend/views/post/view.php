@@ -3,13 +3,18 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\ArrayHelper;
+use helper\ArrayString;
+use frontend\assets\ViewPostAsset;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Post */
+ViewPostAsset::register($this);
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="post-view">
 
@@ -24,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Add a comment', ['comment/create', 'id' => $model->id_post], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -48,6 +54,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     ArrayHelper::getColumn($model->categories, 'name')
                 ) . '</li></ul>',
             ],
+            [
+                'attribute' => 'comments',
+                'format' => 'html',
+                'value' =>
+                    '<div><div border="1px solid black" width="100%">' .
+                        implode(
+                            '</div><div>',
+                            ArrayHelper::getColumn($model->comments, 'body')
+                        ) .
+                    '</div></div>',
+            ]
         ],
     ]) ?>
 

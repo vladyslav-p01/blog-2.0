@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Category;
 use Yii;
 use common\models\Post;
+use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -12,6 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\PostSearch;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -23,7 +25,7 @@ class PostController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['*'],
+                'only' => ['create', 'update'],
                 'rules' => [
                     [
                         'actions' => ['create'],
@@ -53,12 +55,22 @@ class PostController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Post::find(),
+        /**
+         * $searchModel = new PostSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index', [
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
         ]);
+         */
+
+
+        $searchModel = new PostSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -130,12 +142,7 @@ class PostController extends Controller
     {
 
         $model = $this->findModel($id);
-        if (count($model->categories) == 0) {
-            throw new Exception(
-                "You can not to delete this category because it linked with some posts,
-                 first delete related posts"
-            );
-        }
+
         $model->unlinkAll('categories', true);
         $model->delete();
 

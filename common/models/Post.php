@@ -101,4 +101,9 @@ class Post extends \yii\db\ActiveRecord
         $this->deleted = true;
         $this->save();
     }
+
+    public function getComments()
+    {
+        return $this->hasMany(Comment::className(), ['post_id' => 'id_post']);
+    }
 }

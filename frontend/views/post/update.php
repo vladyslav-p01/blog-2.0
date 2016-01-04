@@ -6,6 +6,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Post */
 
 /* @var $categories */
+/*   */
 
 $this->title = 'Update Post: ' . ' ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];

@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\Comment */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $id */
 ?>
 
 <div class="comment-form">
@@ -14,13 +15,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?= $form->field($model, 'post_id')->hiddenInput(['value' => $id])->label(false) ?>
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'author_id')->textInput() ?>
-
-    <?= $form->field($model, 'post_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

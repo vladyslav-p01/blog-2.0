@@ -5,6 +5,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Comment */
+/* @var $post_id */
 
 $this->title = 'Create Comment';
 $this->params['breadcrumbs'][] = ['label' => 'Comments', 'url' => ['index']];
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'id' => $post_id
     ]) ?>
 
 </div>

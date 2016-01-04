@@ -32,9 +32,9 @@ class Comment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['body', 'created_at'], 'required'],
+            [['body'], 'required'],
             [['body'], 'string'],
-            [['created_at', 'updated_at', 'author_id', 'post_id'], 'integer']
+            ['post_id', 'integer']
         ];
     }
 
@@ -59,5 +59,20 @@ class Comment extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::className(), ['id' => 'author_id']);
+    }
+
+    public function save($runValidation = true, $attributeNames = [])
+    {
+        if ($this->isNewRecord) {
+            $this->created_at = time();
+        } else {
+            $this->updated_at = time();
+        }
+
+        $this->author_id = Yii::$app->user->id;
+
+        return parent::save() ? true : false;
+
+
     }
 }

@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 /* @var $categories */
+/* @var $id */
 ?>
 
 <div class="post-form">
@@ -19,6 +20,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
+
 
 
     <div class="form-group">
