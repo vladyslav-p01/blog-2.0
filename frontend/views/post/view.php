@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\ArrayHelper;
-use helper\ArrayString;
+use common\components\ArrayToHtmlStr;
 use frontend\assets\ViewPostAsset;
 
 /* @var $this yii\web\View */
@@ -54,16 +54,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     ArrayHelper::getColumn($model->categories, 'name')
                 ) . '</li></ul>',
             ],
+//            [
+//                'attribute' => 'comments',
+//                'format' => 'html',
+//                'value' =>
+//                // TODO add buttons for delete and update
+//                    '<div><div style="border:1px solid red; /*width:100%*/ >" ' .
+//                        implode(
+//                            '</div><div>',
+//                            ArrayHelper::getColumn($model->comments, 'body')
+//                        ) .
+//                    ' </div> </div>',
+//            ]
             [
                 'attribute' => 'comments',
                 'format' => 'html',
-                'value' =>
-                    '<div><div border="1px solid black" width="100%">' .
-                        implode(
-                            '</div><div>',
-                            ArrayHelper::getColumn($model->comments, 'body')
-                        ) .
-                    '</div></div>',
+                'value' => Html::tag('ul', ArrayToHtmlStr::convert(
+                        'li',
+                        ArrayHelper::map($model->comments, 'id_comment', 'body')
+                    )),
             ]
         ],
     ]) ?>
