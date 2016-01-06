@@ -69,6 +69,7 @@ class PostController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'categories' => Category::find()->all(),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider
         ]);

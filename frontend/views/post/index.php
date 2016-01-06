@@ -21,15 +21,18 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 
-<!--    <ul>-->
-<!--        --><?php //foreach($categories as $category): ?>
-<!--            <li>--><?//= Url::to('index', )$category ?><!--</li>-->
-<!--        --><?php //endforeach; ?>
-<!--    <   /ul>-->
+    <ul>
+        <?php foreach($categories as $category): ?>
+            <li>
+                <a href="<?= Url::to(['index', 'PostSearch[category_id]' => $category->id_category]) ?>">
+                    <?= $category->name ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
@@ -54,6 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->updated_at === null ? $data->created_at : $data->updated_at;
                 }
 
+            ],
+            [
+                'attribute' => 'author',
+                'value' => function($date) {
+                    return $date->author->username;
+                }
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
