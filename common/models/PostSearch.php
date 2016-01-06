@@ -18,19 +18,19 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['id_post', 'created_at', 'updated_at', 'author_id', 'deleted'], 'integer'],
-            [['title', 'body'], 'safe'],
+            //[['id_post', 'created_at', 'updated_at', 'author_id', 'deleted'], 'integer'],
+            [['title', 'body'], 'string'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function scenarios()
+    /*public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
-    }
+    }*/
 
     /**
      * Creates data provider instance with search query applied
@@ -41,7 +41,7 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find();
+        $query = Post::find()->andWhere(['deleted' => false]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,10 +56,6 @@ class PostSearch extends Post
         }
 
         $query->andFilterWhere([
-            'id_post' => $this->id_post,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'author_id' => $this->author_id,
             'deleted' => $this->deleted,
         ]);
 
