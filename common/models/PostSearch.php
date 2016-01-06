@@ -12,6 +12,7 @@ use common\models\Post;
  */
 class PostSearch extends Post
 {
+    public $category_id;//integer; search by category id
     /**
      * @inheritdoc
      */
@@ -20,8 +21,14 @@ class PostSearch extends Post
         return [
             //[['id_post', 'created_at', 'updated_at', 'author_id', 'deleted'], 'integer'],
             [['title', 'body'], 'string'],
+            ['category_id', 'integer'],
         ];
     }
+
+
+
+
+
 
     /**
      * @inheritdoc
@@ -41,7 +48,7 @@ class PostSearch extends Post
      */
     public function search($params)
     {
-        $query = Post::find()->andWhere(['deleted' => false]);
+        $query = Post::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -55,13 +62,15 @@ class PostSearch extends Post
             return $dataProvider;
         }
 
+        $query->joinWith('categories');
+
         $query->andFilterWhere([
-            'deleted' => $this->deleted,
+            'post.deleted' => false,
+            'id_category' => $this->category_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'body', $this->body]);
-
         return $dataProvider;
     }
 }

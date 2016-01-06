@@ -2,10 +2,12 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $searchModel */
+/* @var $categories */
 
 $this->title = 'Posts';
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,12 +20,31 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+
+<!--    <ul>-->
+<!--        --><?php //foreach($categories as $category): ?>
+<!--            <li>--><?//= Url::to('index', )$category ?><!--</li>-->
+<!--        --><?php //endforeach; ?>
+<!--    <   /ul>-->
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'category_id',
+                'format' => 'html',
+                'value' => function ($data) {
+                    $string = '<ul>';
+                    foreach ($data->categories as $category) {
+                        $string .= '<li>' . $category->name . '</li>';
+                    }
+                    $string .= '</ul>';
+                    return $string;
 
+                }
+            ],
             'title',
             'body',
             [
