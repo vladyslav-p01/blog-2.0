@@ -73,6 +73,5 @@ class Comment extends \yii\db\ActiveRecord
 
         return parent::save() ? true : false;
 
-
     }
 }

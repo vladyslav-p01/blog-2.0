@@ -8,7 +8,6 @@ use frontend\assets\ViewPostAsset;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Post */
-ViewPostAsset::register($this);
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];

@@ -20,13 +20,17 @@ class CommentController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create'],
                 'rules' => [
                     [
-                        'actions' => ['create'],
+                        'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@']
                     ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ]
                 ]
 
             ],
@@ -101,6 +105,7 @@ class CommentController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'id' => $id,
             ]);
         }
     }
