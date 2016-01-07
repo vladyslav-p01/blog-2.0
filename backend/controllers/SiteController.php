@@ -6,6 +6,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
+use common\models\Category;
+use common\models\User;
 
 /**
  * Site controller
@@ -55,7 +57,21 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $usersQuantity = count(User::getAllUsers());
+        $categories = Category::getAllCategories();
+
+        //categoryQuantity = [array(categoryName, quantityPostsInCategory)]
+        $categoriesQuantity = [];
+        foreach ($categories as $category) {
+            $categoriesQuantity[] = array($category->name, count($category->categoryPosts));
+        }
+
+        return $this->render('index',
+            [
+                'usersQuantity' => $usersQuantity,
+                'categoriesQuantity' => $categoriesQuantity
+            ]
+        );
     }
 
     public function actionLogin()

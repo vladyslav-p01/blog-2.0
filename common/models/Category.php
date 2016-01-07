@@ -54,4 +54,9 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(Post::className(), ['id_post' => 'post_id'])
             ->viaTable('category_post', ['category_id' => 'id_category']);
     }
+
+    public static function getAllCategories()
+    {
+        return self::find()->all();
+    }
 }
