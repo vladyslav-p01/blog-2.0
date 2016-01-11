@@ -19,13 +19,22 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
     const STATUS_BLOCKED = 11;
+    const STATUS_UNCONFIRMED_EMAIL = 9;
+
+    static $textOfStatus = [
+        self::STATUS_DELETED => 'Deleted',
+        self::STATUS_ACTIVE => 'Active',
+        self::STATUS_BLOCKED => 'Blocked',
+        self::STATUS_UNCONFIRMED_EMAIL => 'Unconfirmed email',
+
+    ];
 
     /**
      * @inheritdoc
@@ -51,8 +60,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            [['username', 'email', 'pas'], 'required' ],
+            ['status', 'default', 'value' => self::STATUS_UNCONFIRMED_EMAIL],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['username', 'unique'],
         ];
     }
 
@@ -191,4 +202,5 @@ class User extends ActiveRecord implements IdentityInterface
     {
        return self::find()->all();
     }
+
 }
