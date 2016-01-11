@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'body')->widget(\yii\redactor\widgets\Redactor::className()) ?>
 
     <?= $form->field($model, 'post_id')->hiddenInput(['value' => $id])->label(false) ?>
 

@@ -35,10 +35,9 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'body'], 'required'],
+            [['title', 'body', 'categories_ids'], 'required'],
             [['body'], 'string'],
             [['title'], 'string', 'max' => 30],
-            ['categories_ids', 'safe']
         ];
     }
 

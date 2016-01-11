@@ -34,13 +34,31 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
+    $categories = \common\models\Category::getAllCategories();
+
+    $categoryMenu[] = ['label' => 'AllCategories', 'url' => ['categories/index']];
+    $categoryMenu[] = [ 'label' => '',  'class' => 'divider'];
+
+
+    $categoryMenu[] = ['label' => 'AllPosts', 'url' => ['post/index']];
+    foreach ($categories as $category) {
+        $categoryMenu[] = ['label' => $category->name,
+            'url' => ['index', 'PostSearch[category_id]'=>$category->id_category]
+    ];
+    }
+
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Users', 'url' => ['user/index']],
-        ['label' => 'Categories', 'url' => ['category/index']],
+        ['label' => 'Categories', 'items' => $categoryMenu],
         ['label' => 'Posts', 'url' => ['post/index']],
         ['label' => 'Comments', 'url' => ['comment/index']],
     ];
+
+
+
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {

@@ -31,9 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_comment',
             'body:ntext',
-            'created_at',
-            'updated_at',
-            'author_id',
+            'created_at:datetime',
+            'updated_at:datetime',
+            [
+                'attribute' => 'author',
+                'value' => $model->author->username,
+            ],
             'post_id',
         ],
     ]) ?>

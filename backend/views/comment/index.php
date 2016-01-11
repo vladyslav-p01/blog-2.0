@@ -24,10 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id_comment',
             'body:ntext',
-            'created_at',
-            'updated_at',
-            'author_id',
-            // 'post_id',
+            'created_at:datetime',
+            'updated_at:datetime',
+            [
+                'attribute' => 'author',
+                'value' => function ($data) {
+                    return $data->author->username;
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

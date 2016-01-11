@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_post',
             'title',
-            'body',
+            'body:html',
             [
                 'attribute' => 'changed',
                 'format' => 'datetime',
@@ -66,15 +66,18 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        ) .
 //                    ' </div> </div>',
 //            ]
-            [
-                'attribute' => 'comments',
-                'format' => 'html',
-                'value' => Html::tag('ul', ArrayToHtmlStr::convert(
-                        'li',
-                        ArrayHelper::map($model->comments, 'id_comment', 'body')
-                    )),
-            ]
+
         ],
     ]) ?>
+
+<p align="center"><b>Комментарии:</b></p>
+    <?php
+
+        $a = $model->comments;
+    echo  Html::tag('div', ArrayToHtmlStr::convertWithActions(
+        'div',
+        'div',
+        $model->comments
+    )); ?>
 
 </div>

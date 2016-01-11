@@ -65,7 +65,7 @@ class PostSearch extends Post
         $query->joinWith('categories');
 
         $query->andFilterWhere([
-            'post.deleted' => false,
+            //'post.deleted' => false,
             'id_category' => $this->category_id,
         ]);
 

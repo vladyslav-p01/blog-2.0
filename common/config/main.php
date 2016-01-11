@@ -11,4 +11,10 @@ return [
             'enablePrettyUrl' => true
         ]
     ],
+    'modules' => [
+        'redactor' => 'yii\redactor\RedactorModule',
+        'uploadDir' => '@webroot/uploads',
+        'uploadUrl' => '@web/uploads',
+        'imageAllowExtensions'=>['jpg','png','gif']
+    ]
 ];
