@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id_category
  * @property string $name
- * @property integer $deleted
+ * @property integer $deleted // if deleted then 1
  *
  * @property $posts
  */
