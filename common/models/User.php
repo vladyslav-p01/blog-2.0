@@ -19,7 +19,6 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -60,10 +59,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email', 'pas'], 'required' ],
             ['status', 'default', 'value' => self::STATUS_UNCONFIRMED_EMAIL],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            ['username', 'unique'],
+            ['status', 'in', 'range' => array_keys(User::$textOfStatus)],
         ];
     }
 

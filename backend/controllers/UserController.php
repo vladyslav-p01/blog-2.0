@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\UserForm;
 use Yii;
 use common\models\User;
 use yii\data\ActiveDataProvider;
@@ -17,6 +18,7 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
+            // TODO deleteHard доступен только админу
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -60,21 +62,9 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new UserForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            $user = new User();
-            $user->username = $this->username;
-            $user->email = $this->email;
-            $user->setPassword($this->password);
-            $user->generateAuthKey();
-            if ($user->save()) {
-                return $user;
-            }
-
-            return null;
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -102,13 +92,23 @@ class UserController extends Controller
         }
     }
 
+    public function actionDelete($id)
+    {
+        /* @var User $user */
+        $user = User::findOne($id);
+        $user->status = User::STATUS_DELETED;
+        $user->save();
+        return $this->redirect(['index']);
+    }
+
+
     /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDeleteHard($id)
     {
         $this->findModel($id)->delete();
 
@@ -124,7 +124,7 @@ class UserController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = UserForm::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

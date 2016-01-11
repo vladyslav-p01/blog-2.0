@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\User;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,7 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'username',
              'email:email',
-             'status',
+             [
+                 'attribute' => 'status',
+                 'value' => function($data) {
+                     return User::$textOfStatus[$data->status];
+                 }
+             ],
              'created_at:datetime',
              'updated_at:datetime',
 
