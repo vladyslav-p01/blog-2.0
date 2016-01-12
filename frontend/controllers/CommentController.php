@@ -22,15 +22,9 @@ class CommentController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@']
                     ],
-                    [
-                        'actions' => ['view'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ]
                 ]
 
             ],

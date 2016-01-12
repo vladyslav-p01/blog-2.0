@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'title',
-            'body',
+            'body:html',
             [
                 'attribute' => 'changed',
                 'format' => 'datetime',
