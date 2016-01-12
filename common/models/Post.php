@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\ErrorException;
 
 /**
  * This is the model class for table "post".
@@ -80,12 +81,13 @@ class Post extends \yii\db\ActiveRecord
 
         if ($this->getIsNewRecord()) {
             $this->created_at = time();
+            $this->author_id = Yii::$app->user->identity->getId();
         } else {
             $this->updated_at = time();
         }
-
-        $this->author_id = Yii::$app->user->identity->getId();
-        return parent::save($runValidation, $attributeNames) ? true : false;
+        if (!parent::save($runValidation, $attributeNames)) {
+            throw new ErrorException('Cannot to save');
+        } else return true;
     }
 
     public function linkRelations()
@@ -96,11 +98,6 @@ class Post extends \yii\db\ActiveRecord
         }
     }
 
-    public function delete()
-    {
-        $this->deleted = true;
-        $this->save();
-    }
 
     public function getComments()
     {

@@ -122,9 +122,6 @@ class PostController extends Controller
 
         $model->deleted = 1;
 
-//        if (count($model->comments) != 0) {
-//
-//        }
         return $this->redirect(['index']);
     }
 

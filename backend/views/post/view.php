@@ -54,18 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ArrayHelper::getColumn($model->categories, 'name')
                 ) . '</li></ul>',
             ],
-//            [
-//                'attribute' => 'comments',
-//                'format' => 'html',
-//                'value' =>
-//                // TODO add buttons for delete and update
-//                    '<div><div style="border:1px solid red; /*width:100%*/ >" ' .
-//                        implode(
-//                            '</div><div>',
-//                            ArrayHelper::getColumn($model->comments, 'body')
-//                        ) .
-//                    ' </div> </div>',
-//            ]
+
 
         ],
     ]) ?>

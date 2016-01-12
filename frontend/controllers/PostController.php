@@ -95,7 +95,8 @@ class PostController extends Controller
     {
         $model = new Post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->save();
             $model->linkRelations();
             return $this->redirect(['view', 'id' => $model->id_post]);
         } else {
@@ -141,10 +142,9 @@ class PostController extends Controller
     {
 
         $model = $this->findModel($id);
-
-        $model->unlinkAll('categories', true);
-        $model->delete();
-
+        $model->categories_ids = 0; // only for passing validation
+        $model->deleted = 1;
+        $model->save();
         return $this->redirect(['index']);
     }
 

@@ -81,7 +81,7 @@ class m160111_231551_moderator_permissions extends Migration
         $auth->addChild($moderator, $updateUser);
         $auth->addChild($moderator, $deleteUser);
 
-        $auth->assign($moderator, 1);
+        $auth->assign($moderator, 2);
     }
 
     public function safeDown()

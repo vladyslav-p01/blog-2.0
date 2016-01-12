@@ -29,7 +29,7 @@ class m160111_231954_admin_permissions extends Migration
         $auth->add($deleteHardCategory);
         $auth->addChild($admin, $deleteHardCategory);
 
-        $auth->assign($admin, 2);
+        $auth->assign($admin, 1);
     }
 
     public function down()
