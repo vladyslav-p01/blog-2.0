@@ -17,9 +17,12 @@ class ConfirmAccess extends Component {
 
     public static function check($accessName)
     {
-//        if (!Yii::$app->user->can($accessName)) {
-//            throw new NotFoundHttpException('Access denied');
-//        }
+        if (!Yii::$app->authManager->getPermission($accessName)) {
+            throw new NotFoundHttpException('Such permission does not exist');
+        }
+        if (!Yii::$app->user->can($accessName)) {
+            throw new NotFoundHttpException('Access denied');
+        }
     }
 
 }

@@ -64,7 +64,7 @@ class CategoryController extends Controller
      */
     public function actionCreate()
     {
-       // ConfirmAccess::check('create');
+       ConfirmAccess::check('createCategory');
 
         $model = new Category();
 

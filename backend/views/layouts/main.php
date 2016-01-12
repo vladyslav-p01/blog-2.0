@@ -37,11 +37,10 @@ AppAsset::register($this);
 
     $categories = \common\models\Category::getAllCategories();
 
-    $categoryMenu[] = ['label' => 'AllCategories', 'url' => ['categories/index']];
+    $categoryMenu[] = ['label' => 'AllPosts', 'url' => ['post/index']];
     $categoryMenu[] = [ 'label' => '',  'class' => 'divider'];
 
 
-    $categoryMenu[] = ['label' => 'AllPosts', 'url' => ['post/index']];
     foreach ($categories as $category) {
         $categoryMenu[] = ['label' => $category->name,
             'url' => ['index', 'PostSearch[category_id]'=>$category->id_category]
@@ -51,8 +50,8 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Users', 'url' => ['user/index']],
-        ['label' => 'Categories', 'items' => $categoryMenu],
-        ['label' => 'Posts', 'url' => ['post/index']],
+        ['label' => 'Categories', 'url' => ['category/index']],
+        ['label' => 'Posts', 'items' => $categoryMenu],
         ['label' => 'Comments', 'url' => ['comment/index']],
     ];
 

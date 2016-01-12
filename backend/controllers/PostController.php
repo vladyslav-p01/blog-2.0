@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\ConfirmAccess;
 use common\models\Category;
 use Yii;
 use common\models\Post;
@@ -39,10 +40,9 @@ class PostController extends Controller
     public function actionIndex()
     {
 
+
         $searchModel = new PostSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => Post::find(),
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
 
         return $this->render('index', [
             'categories' => Category::find()->all(),
@@ -71,6 +71,8 @@ class PostController extends Controller
      */
     public function actionCreate()
     {
+        ConfirmAccess::check('createPost');
+
         $model = new Post();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -92,6 +94,8 @@ class PostController extends Controller
      */
     public function actionUpdate($id)
     {
+        ConfirmAccess::check('updatePost');
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -112,6 +116,8 @@ class PostController extends Controller
     public function actionDelete($id)
     {
 
+        ConfirmAccess::check('deletePost');
+
         $model = $this->findModel($id);
 
         $model->deleted = 1;
@@ -130,6 +136,7 @@ class PostController extends Controller
      */
     public function actionDeleteHard($id)
     {
+        ConfirmAccess::check('deleteHardPost');
 
         $model = $this->findModel($id);
 

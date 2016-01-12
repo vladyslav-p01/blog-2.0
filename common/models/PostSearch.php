@@ -46,7 +46,7 @@ class PostSearch extends Post
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $deleted = false)
     {
         $query = Post::find();
 
@@ -64,10 +64,16 @@ class PostSearch extends Post
 
         $query->joinWith('categories');
 
-        $query->andFilterWhere([
-            //'post.deleted' => false,
-            'id_category' => $this->category_id,
-        ]);
+        if ($deleted) {
+            $query->andFilterWhere([
+                'id_category' => $this->category_id,
+            ]);
+        } else {
+            $query->andFilterWhere([
+                'post.deleted' => false,
+                'id_category' => $this->category_id,
+            ]);
+        }
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'body', $this->body]);

@@ -45,6 +45,12 @@ class LoginForm extends Model
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
+            if ($user->status === User::STATUS_DELETED) {
+                $this->addError($attribute, 'You have been deleted');
+            }
+            if ($user->status === User::STATUS_BLOCKED) {
+                $this->addError($attribute, 'You have been blocked');
+            }
         }
     }
 

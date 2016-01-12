@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\UserForm;
+use common\components\ConfirmAccess;
 use Yii;
 use common\models\User;
 use yii\data\ActiveDataProvider;
@@ -18,7 +19,6 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
-            // TODO deleteHard доступен только админу
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -62,6 +62,7 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
+        ConfirmAccess::check('createUser');
         $model = new UserForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -81,6 +82,8 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
+        ConfirmAccess::check('updateUser');
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -94,6 +97,7 @@ class UserController extends Controller
 
     public function actionDelete($id)
     {
+        ConfirmAccess::check('deleteUser');
         /* @var User $user */
         $user = User::findOne($id);
         $user->status = User::STATUS_DELETED;
@@ -110,11 +114,14 @@ class UserController extends Controller
      */
     public function actionDeleteHard($id)
     {
+        ConfirmAccess::check('deleteHardUser');
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
+    
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

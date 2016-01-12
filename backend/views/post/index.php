@@ -21,16 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 
-    <ul>
-        <?php foreach($categories as $category): ?>
-            <li>
-                <a href="<?= Url::to(['index', 'PostSearch[category_id]' => $category->id_category]) ?>">
-                    <?= $category->name ?>
-                </a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [

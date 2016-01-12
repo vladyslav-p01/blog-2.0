@@ -24,7 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'username',
+            [
+                'attribute' => 'username',
+                'value' => function ($data) {
+                    return $data->status === User::STATUS_DELETED ? $data->username . ' (deleted)' : $data->username;
+                }
+            ],
              'email:email',
              [
                  'attribute' => 'status',
