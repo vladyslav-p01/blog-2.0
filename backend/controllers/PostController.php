@@ -20,6 +20,7 @@ use common\models\PostSearch;
  */
 class PostController extends Controller
 {
+    public $layout = 'admin';
     public function behaviors()
     {
         return [

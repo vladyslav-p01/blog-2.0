@@ -34,30 +34,9 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-
-    $categories = \common\models\Category::getAllCategories();
-
-    $categoryMenu[] = ['label' => 'AllPosts', 'url' => ['post/index']];
-    $categoryMenu[] = [ 'label' => '',  'class' => 'divider'];
-
-
-    foreach ($categories as $category) {
-        $categoryMenu[] = ['label' => $category->name,
-            'url' => ['index', 'PostSearch[category_id]'=>$category->id_category]
-    ];
-    }
-
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Users', 'url' => ['user/index']],
-        ['label' => 'Categories', 'url' => ['category/index']],
-        ['label' => 'Posts', 'items' => $categoryMenu],
-        ['label' => 'Comments', 'url' => ['comment/index']],
     ];
-
-
-
-
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
@@ -79,6 +58,7 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
+
         <?= $content ?>
     </div>
 </div>

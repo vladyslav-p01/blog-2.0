@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Comment;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -8,12 +9,14 @@ use common\models\LoginForm;
 use yii\filters\VerbFilter;
 use common\models\Category;
 use common\models\User;
+use common\models\Post;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    public $layout = 'admin';
     /**
      * @inheritdoc
      */
@@ -69,13 +72,16 @@ class SiteController extends Controller
         return $this->render('index',
             [
                 'usersQuantity' => $usersQuantity,
-                'categoriesQuantity' => $categoriesQuantity
+                'categoriesQuantity' => $categoriesQuantity,
+                'commentsQuantity' => count(Comment::find()->all()),
+                'postsQuantity' => count(Post::find()->all())
             ]
         );
     }
 
     public function actionLogin()
     {
+        $this->layout = 'login';
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -84,7 +90,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-            return $this->render('login', [
+            return $this->render('login2', [
                 'model' => $model,
             ]);
         }
