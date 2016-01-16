@@ -19,12 +19,10 @@ return [
     ],
     'modules' => [
 
-//        'redactor' => [
-//            'class' => 'yii\redactor\RedactorModule',
-//            'uploadDir' => '@webroot/uploads',
-//            'uploadUrl' => '@web/uploads',
-//            'imageAllowExtensions'=>['jpg','png','gif']
-//        ],
+        'redactor' => [
+            'class' => 'yii\redactor\RedactorModule',
+            'imageAllowExtensions'=>['jpg','png','gif']
+        ],
 
         'commentModule' => [
             'class' => 'frontend\modules\commentModule',
