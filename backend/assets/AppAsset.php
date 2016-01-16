@@ -20,8 +20,8 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/AdminLTE.min.css',
         'css/_all-skins.min.css',
-        //'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
-        //'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
+        'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
+        'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
     ];
     public $js = [
         'js/bootstrap.min.js',

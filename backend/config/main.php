@@ -11,7 +11,6 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',
@@ -34,4 +33,14 @@ return [
         ],
     ],
     'params' => $params,
+
+    'modules' => [
+        'redactor' => [
+            'class' => 'yii\redactor\RedactorModule',
+            'uploadDir' => '@webroot/uploads',
+            //'uploadUrl' => '../../frontend/web',
+            'uploadUrl' => '@web/uploads',
+            'imageAllowExtensions'=>['jpg','png','gif']
+        ],
+    ]
 ];
