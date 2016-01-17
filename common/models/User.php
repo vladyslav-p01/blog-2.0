@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $confirm_key
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -198,6 +199,22 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getAllUsers()
     {
        return self::find()->all();
+    }
+
+    public function sendEmailConfirm()
+    {
+        $this->confirm_key = Yii::$app->security->generateRandomString();
+        Yii::$app->mailer
+            ->compose([
+                'html' => 'emailConfirmHtml',
+                'text' => 'emailConfirmText'
+            ], [
+                'userModel' => $this,
+            ])->setFrom(Yii::$app->params['email'])
+            ->setTo($this->email)
+            ->setSubject('Please confirm your email')
+            ->send();
+
     }
 
 }

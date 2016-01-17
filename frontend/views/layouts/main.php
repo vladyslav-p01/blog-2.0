@@ -3,7 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use backend\assets\AppAsset;
+use frontend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -49,6 +49,7 @@ AppAsset::register($this);
 
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Sign up', 'url' => ['site/signup']],
         ['label' => 'Categories', 'url' => ['category/index']],
         ['label' => 'Posts', 'items' => $categoryMenu],
     ];
