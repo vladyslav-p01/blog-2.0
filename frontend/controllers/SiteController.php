@@ -1,12 +1,14 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\base\ErrorException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -62,6 +64,9 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            [
+
+            ]
         ];
     }
 
@@ -152,7 +157,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
+                    return $this->render('request-email-confirm');
                 }
             }
         }
@@ -209,5 +214,23 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionConfirmEmail($confirmKey)
+    {
+        if ($confirmKey !== '') {
+            /* @var $user \common\models\user */
+            $user = User::findOne(['confirm_key' => $confirmKey]);
+            if ($user) {
+                if ($user->status !== User::STATUS_UNCONFIRMED_EMAIL) {
+                    throw new BadRequestHttpException('Your email was already activated');
+                }
+                $user->status = User::STATUS_ACTIVE;
+                $user->save();
+                return $this->render('email-confirm');
+            } else throw new BadRequestHttpException('Not found user with such key');
+        }
+
+        throw new BadRequestHttpException('Failed to confirm your email');
     }
 }

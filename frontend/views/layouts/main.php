@@ -3,11 +3,11 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use frontend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
@@ -34,13 +34,30 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
+    $categories = \common\models\Category::getAllCategories();
+
+    $categoryMenu[] = ['label' => 'AllPosts', 'url' => ['post/index']];
+    $categoryMenu[] = [ 'label' => '',  'class' => 'divider'];
+
+
+    foreach ($categories as $category) {
+        $categoryMenu[] = ['label' => $category->name,
+            'url' => ['index', 'PostSearch[category_id]'=>$category->id_category]
+    ];
+    }
+
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'Sign up', 'url' => ['site/signup']],
+        ['label' => 'Categories', 'url' => ['category/index']],
+        ['label' => 'Posts', 'items' => $categoryMenu],
     ];
+
+
+
+
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [

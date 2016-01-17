@@ -19,12 +19,22 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $confirm_key
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_BLOCKED = 11;
+    const STATUS_UNCONFIRMED_EMAIL = 9;
+
+    static $textOfStatus = [
+        self::STATUS_DELETED => 'Deleted',
+        self::STATUS_ACTIVE => 'Active',
+        self::STATUS_BLOCKED => 'Blocked',
+        self::STATUS_UNCONFIRMED_EMAIL => 'Unconfirmed email',
+
+    ];
 
     /**
      * @inheritdoc
@@ -50,8 +60,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_UNCONFIRMED_EMAIL],
+            ['status', 'in', 'range' => array_keys(User::$textOfStatus)],
         ];
     }
 
@@ -79,7 +89,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username]);
     }
 
     /**
@@ -185,4 +195,26 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public static function getAllUsers()
+    {
+       return self::find()->all();
+    }
+
+    public function sendEmailConfirm()
+    {
+        $this->confirm_key = Yii::$app->security->generateRandomString();
+        Yii::$app->mailer
+            ->compose([
+                'html' => 'emailConfirmHtml',
+                'text' => 'emailConfirmText'
+            ], [
+                'userModel' => $this,
+            ])->setFrom(Yii::$app->params['email'])
+            ->setTo($this->email)
+            ->setSubject('Please confirm your email')
+            ->send();
+
+    }
+
 }
