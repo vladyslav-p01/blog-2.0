@@ -1,3 +1,7 @@
+default users:
+    login: admin, pass: admin
+           moderator    moderator
+
 Yii 2 Advanced Project Template
 ===============================
 
