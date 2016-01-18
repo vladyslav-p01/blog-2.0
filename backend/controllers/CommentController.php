@@ -88,7 +88,7 @@ class CommentController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_comment]);
+            return $this->redirect(['post/view', 'id' => $model->post_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -105,9 +105,11 @@ class CommentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $post_id = $model->post_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['post/view', 'id' => $post_id]);
     }
 
     /**

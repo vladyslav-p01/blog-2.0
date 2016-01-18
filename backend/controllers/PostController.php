@@ -24,7 +24,6 @@ class PostController extends Controller
     public function behaviors()
     {
         return [
-
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -101,7 +100,6 @@ class PostController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->unlinkAll('categories', true);
-            $model->save();
             $model->linkRelations();
             return $this->redirect(['view', 'id' => $model->id_post]);
         } else {
@@ -122,6 +120,7 @@ class PostController extends Controller
         $model = $this->findModel($id);
 
         $model->deleted = 1;
+        $model->save(false);
 
         return $this->redirect(['index']);
     }
@@ -139,11 +138,24 @@ class PostController extends Controller
         $model = $this->findModel($id);
 
         $model->unlinkAll('categories', true);
+        if (count($comments = $model->comments)) {
+            foreach ($comments as $comment) {
+                /* @var $comment \common\models\Comment*/
+                $comment->delete();
+            }
+        }
         $model->delete();
 
         return $this->redirect(['index']);
     }
 
+    public function actionUndoDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->deleted = 0;
+        $model->save(false);
+        return $this->redirect(['view', 'id' => $model->id_post]);
+    }
     /**
      * Finds the Post model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

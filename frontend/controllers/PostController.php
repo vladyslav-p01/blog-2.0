@@ -27,13 +27,24 @@ class PostController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['update', 'delete'],
+                        'allow' => true,
+                        'matchCallback' => function (){
+                            $id = Yii::$app->request->get('id');
+                            //Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+                            //Yii::$app->session->setFlash('error', 'Only authors of posts can update or delete them');
+                            return (Yii::$app->user->id == Post::findOne($id)->author_id)
+                                ? true : false;
+                        }
+                    ],
+                    [
+                        'actions' => ['create'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
                         'actions' => ['view', 'index'],
                         'allow' => true,
-                        'roles' => ['?']
                     ]
                 ]
             ],
@@ -53,16 +64,6 @@ class PostController extends Controller
      */
     public function actionIndex()
     {
-        /**
-         * $searchModel = new PostSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-        ]);
-         */
-
-
         $searchModel = new PostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -119,7 +120,6 @@ class PostController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->unlinkAll('categories', true);
-            $model->save();
             $model->linkRelations();
             return $this->redirect(['view', 'id' => $model->id_post]);
         } else {
@@ -142,9 +142,8 @@ class PostController extends Controller
     {
 
         $model = $this->findModel($id);
-        $model->categories_ids = 0; // only for passing validation
         $model->deleted = 1;
-        $model->save();
+        $model->save(false);
         return $this->redirect(['index']);
     }
 

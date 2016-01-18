@@ -47,17 +47,11 @@ AppAsset::register($this);
     ];
     }
 
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Sign up', 'url' => ['site/signup']],
-        ['label' => 'Categories', 'url' => ['category/index']],
-        ['label' => 'Posts', 'items' => $categoryMenu],
-    ];
-
-
-
-
+    $menuItems[]= ['label' => 'Home', 'url' => ['/site/index']];
+    $menuItems[] = ['label' => 'Categories', 'url' => ['category/index']];
+    $menuItems[] = ['label' => 'Posts', 'items' => $categoryMenu];
     if (Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Sign up', 'url' => ['site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
@@ -66,6 +60,7 @@ AppAsset::register($this);
             'linkOptions' => ['data-method' => 'post']
         ];
     }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,

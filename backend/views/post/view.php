@@ -22,20 +22,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_post], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id_post], [
-            'class' => 'btn btn-danger',
+            'class' => 'btn btn-warning',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
         ]) ?>
         <?= Html::a('Add a comment', ['comment/create', 'id' => $model->id_post], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Delete hard', ['delete-hard', 'id' => $model->id_post], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
+        <?= Html::a('Undo deleting', ['undo-delete', 'id' => $model->id_post], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id_post',
-            'title',
+            [
+                'attribute' => 'title',
+                'value' => $model->deleted ? $model->title . ' (deleted)' : $model->title,
+            ],
             'body:html',
             [
                 'attribute' => 'changed',
@@ -62,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <p align="center"><b>Комментарии:</b></p>
     <?php
 
-        $a = $model->comments;
+    // ArrayToHtmlStr::convertWithActions wraps comments into two tags
     echo  Html::tag('div', ArrayToHtmlStr::convertWithActions(
         'div',
         'div',

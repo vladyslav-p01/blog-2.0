@@ -7,6 +7,7 @@ use Yii;
 use common\models\Category;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -116,7 +117,7 @@ class CategoryController extends Controller
         foreach ($category->categoryPosts as $post) {
             /* @var $post \common\models\Post  */
             $post->deleted = 1;
-            $post->save();
+            $post->save(false);
         }
         $category->save();
 
@@ -126,11 +127,21 @@ class CategoryController extends Controller
     public function actionDeleteHard($id)
     {
         ConfirmAccess::check('deleteHardCategory');
-
         $category = $this->findModel($id);
 
-        //->delete();
 
+        if (count($posts = $category->categoryPosts) != 0) {
+            foreach ($posts as $post) {
+                /* @var $post \common\models\Post*/
+
+                $post->unlink('categories', $category, true);
+
+                if (count($postCategories = $post->categories) == 0) {
+                    $post->delete();
+                }
+            }
+        }
+        $category->delete();
         return $this->redirect(['index']);
     }
 
@@ -138,6 +149,13 @@ class CategoryController extends Controller
     {
         $model = $this->findModel($id);
         $model->deleted = 0;
+        if (count($posts = $model->categoryPosts) != 0) {
+            foreach ($posts as $post) {
+                /* @var $post \common\models\Post */
+                $post->deleted = 0;
+                $post->save(false);
+            }
+        }
         $model->save();
         return $this->redirect(['view', 'id' => $model->id_category]);
     }

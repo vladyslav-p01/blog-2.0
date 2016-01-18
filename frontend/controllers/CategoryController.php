@@ -22,6 +22,10 @@ class CategoryController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['delete'],
+                        'allow' => false,
+                    ],
+                    [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -112,12 +116,13 @@ class CategoryController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $category = $this->findModel($id);
+//        $category->deleted = true;
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Category model based on its primary key value.
