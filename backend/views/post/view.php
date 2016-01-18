@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\ArrayHelper;
-use common\components\ArrayToHtmlStr;
-use frontend\assets\ViewPostAsset;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Post */
+/* @var $dataProvider */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
@@ -20,15 +20,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_post], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_post], [
-            'class' => 'btn btn-warning',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php if (Yii::$app->user->can('updatePost')): ?>
+            <?= Html::a('Update', ['update', 'id' => $model->id_post], ['class' => 'btn btn-primary']) ?>
+        <?php endif ?>
+        <?php if (Yii::$app->user->can('deletePost')): ?>
+            <?= Html::a('Delete', ['delete', 'id' => $model->id_post], [
+                'class' => 'btn btn-warning',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]) ?>
+            <?= Html::a('Undo deleting', ['undo-delete', 'id' => $model->id_post], ['class' => 'btn btn-primary']) ?>
+        <?php endif ?>
         <?= Html::a('Add a comment', ['comment/create', 'id' => $model->id_post], ['class' => 'btn btn-success']) ?>
+        <?php if (Yii::$app->user->can('deleteHardPost')): ?>
         <?= Html::a('Delete hard', ['delete-hard', 'id' => $model->id_post], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -36,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Undo deleting', ['undo-delete', 'id' => $model->id_post], ['class' => 'btn btn-primary']) ?>
+        <?php endif ?>
+
     </p>
 
     <?= DetailView::widget([
@@ -70,14 +77,19 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-<p align="center"><b>Комментарии:</b></p>
-    <?php
+    <p align="center"><b>Комментарии:</b></p>
 
-    // ArrayToHtmlStr::convertWithActions wraps comments into two tags
-    echo  Html::tag('div', ArrayToHtmlStr::convertWithActions(
-        'div',
-        'div',
-        $model->comments
-    )); ?>
+    <?php if (count($dataProvider->getModels()) != 0): ?>
+        <?= ListView::widget([
+            'dataProvider' => $dataProvider,
+            'itemView' => function ($comment) {
+                return $this->render('comment-row',
+                    [
+                        'comment' => $comment,
+                    ]);
+            }
+        ]) ?>
+    <?php else: echo 'No comments yet'?>
+    <?php endif ?>
 
 </div>

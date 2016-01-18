@@ -15,7 +15,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'body')->widget(\yii\redactor\widgets\Redactor::className()) ?>
 
-    <?= $form->field($model, 'post_id')->hiddenInput(['value' => $id])->label(false) ?>
+    <?php if ($model->isNewRecord) : ?>
+        <?= $form->field($model, 'post_id')->hiddenInput(['value' => $id])->label(false) ?>
+    <?php endif ?>
 
 
     <div class="form-group">

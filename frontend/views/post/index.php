@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use \yii\widgets\ListView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -16,46 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php if (!Yii::$app->user->isGuest): ?>
     <p>
         <?= Html::a('Create Post', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php endif ?>
 
-
-    <?= GridView::widget([
+<?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'attribute' => 'category_id',
-                'format' => 'html',
-                'value' => function ($data) {
-                    $string = '<ul>';
-                    foreach ($data->categories as $category) {
-                        $string .= '<li>' . $category->name . '</li>';
-                    }
-                    $string .= '</ul>';
-                    return $string;
-
-                }
-            ],
-            'title',
-            'body:html',
-            [
-                'attribute' => 'Changed',
-                'format' => 'dateTime',
-                'value' => function($data) {
-                    return $data->updated_at === null ? $data->created_at : $data->updated_at;
-                }
-
-            ],
-            [
-                'attribute' => 'author',
-                'value' => function($date) {
-                    return $date->author->username;
-                }
-            ],
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+        'itemView' => function ($post) {
+            return $this->render('post-row',
+                [
+                    'post' => $post
+                ]);
+        }
+    ]) ?>
 
 </div>

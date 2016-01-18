@@ -45,12 +45,6 @@ class CommentController extends Controller
 
             ],
 
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
         ];
     }
 
@@ -68,7 +62,7 @@ class CommentController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'post_id' => $id,
+                'id' => $id,
             ]);
         }
     }
@@ -88,7 +82,6 @@ class CommentController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'id' => $id,
             ]);
         }
     }

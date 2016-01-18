@@ -30,12 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Undo delete', ['undo-delete', 'id' => $model->id_category],
             ['class' => 'btn btn-success']) ?>
 
-        <?= Html::a('HardDelete', ['delete-hard', 'id' => $model->id_category], [
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php if (Yii::$app->user->can('deleteHardCategory')): ?>
+            <?= Html::a('HardDelete', ['delete-hard', 'id' => $model->id_category], [
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php endif ?>
     </p>
 
     <?= DetailView::widget([

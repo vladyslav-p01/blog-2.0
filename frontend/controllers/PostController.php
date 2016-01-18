@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Category;
+use common\models\Comment;
 use Yii;
 use common\models\Post;
 use yii\base\ErrorException;
@@ -32,7 +33,7 @@ class PostController extends Controller
                         'matchCallback' => function (){
                             $id = Yii::$app->request->get('id');
                             //Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
-                            //Yii::$app->session->setFlash('error', 'Only authors of posts can update or delete them');
+                            Yii::$app->session->setFlash('error', 'Only authors of posts can update or delete them');
                             return (Yii::$app->user->id == Post::findOne($id)->author_id)
                                 ? true : false;
                         }
@@ -81,9 +82,14 @@ class PostController extends Controller
      */
     public function actionView($id)
     {
+        $commentsDataProvider = new ActiveDataProvider([
+            'query' => Comment::find()->andWhere(['post_id' => $id])
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'categories' => $this->getCategories()
+            'categories' => $this->getCategories(),
+            'dataProvider' => $commentsDataProvider
         ]);
     }
 

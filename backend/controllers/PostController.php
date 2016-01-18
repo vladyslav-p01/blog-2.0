@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\components\ConfirmAccess;
 use common\models\Category;
+use common\models\Comment;
 use Yii;
 use common\models\Post;
 use yii\base\ErrorException;
@@ -24,6 +25,15 @@ class PostController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -58,9 +68,17 @@ class PostController extends Controller
      */
     public function actionView($id)
     {
+        $commentsDataProvider = new ActiveDataProvider([
+            'query' => Comment::find()->andWhere(['post_id' => $id]),
+            'sort' => [
+                'defaultOrder' => ['created_at' => SORT_DESC],
+            ]
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'categories' => $this->getCategories()
+            'categories' => $this->getCategories(),
+            'dataProvider' => $commentsDataProvider
         ]);
     }
 

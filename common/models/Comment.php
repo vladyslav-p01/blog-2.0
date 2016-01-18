@@ -50,6 +50,7 @@ class Comment extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'author_id' => 'Author ID',
             'post_id' => 'Post ID',
+            'author' => 'Author',
         ];
     }
 

@@ -55,7 +55,8 @@ class Post extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'author_id' => 'Author ID',
             'deleted' => 'Deleted',
-            'category_id' => 'Category'
+            'category_id' => 'Category',
+            'author' => 'Author',
         ];
     }
 

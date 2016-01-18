@@ -21,6 +21,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'body')->widget(\yii\redactor\widgets\Redactor::className()) ?>
 
+    <?php if (isset($post_id)): ?>
+        <?= $form->field($model, 'post_id')->hiddenInput(['value' => $post_id]) ?>
+    <?php endif ?>
 
 
     <div class="form-group">

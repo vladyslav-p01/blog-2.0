@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\components\ConfirmAccess;
 
 /**
  * CommentController implements the CRUD actions for Comment model.
@@ -20,13 +21,14 @@ class CommentController extends Controller
     public function behaviors()
     {
         return [
-
-
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ]
+                ]
             ],
         ];
     }
@@ -61,10 +63,13 @@ class CommentController extends Controller
     /**
      * Creates a new Comment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id - post_id
      * @return mixed
      */
     public function actionCreate($id)
     {
+        ConfirmAccess::check('createComment');
+
         $model = new Comment();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -72,7 +77,7 @@ class CommentController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'post_id' => $id,
+                'id' => $id,
             ]);
         }
     }
@@ -80,11 +85,13 @@ class CommentController extends Controller
     /**
      * Updates an existing Comment model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param integer $id - comment_id
      * @return mixed
      */
     public function actionUpdate($id)
     {
+        ConfirmAccess::check('updateComment');
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -92,7 +99,6 @@ class CommentController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'id' => $id,
             ]);
         }
     }
@@ -105,6 +111,8 @@ class CommentController extends Controller
      */
     public function actionDelete($id)
     {
+        ConfirmAccess::check('deleteComment');
+
         $model = $this->findModel($id);
         $post_id = $model->post_id;
         $model->delete();
