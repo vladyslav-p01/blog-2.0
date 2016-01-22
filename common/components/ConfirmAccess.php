@@ -15,12 +15,12 @@ use Yii;
 
 class ConfirmAccess extends Component {
 
-    public static function check($accessName)
+    public static function check($accessName, $params = [])
     {
         if (!Yii::$app->authManager->getPermission($accessName)) {
             throw new NotFoundHttpException('Such permission does not exist');
         }
-        if (!Yii::$app->user->can($accessName)) {
+        if (!Yii::$app->user->can($accessName, $params)) {
             throw new NotFoundHttpException('Access denied');
         }
     }
