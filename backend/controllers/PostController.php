@@ -112,9 +112,8 @@ class PostController extends Controller
      */
     public function actionUpdate($id)
     {
-        ConfirmAccess::check('updatePost');
-
         $model = $this->findModel($id);
+        ConfirmAccess::check('updatePost', ['object' => $model]);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->unlinkAll('categories', true);
@@ -132,10 +131,8 @@ class PostController extends Controller
 
     public function actionDelete($id)
     {
-
-        ConfirmAccess::check('deletePost');
-
         $model = $this->findModel($id);
+        ConfirmAccess::check('deletePost', ['object' => $model]);
 
         $model->deleted = 1;
         $model->save(false);
